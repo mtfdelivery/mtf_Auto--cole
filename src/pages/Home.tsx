@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import React, { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Star, ShieldCheck, Video, ChevronDown } from 'lucide-react';
 import PageTransition from '@/components/PageTransition';
 import OptimizedImage from '@/components/OptimizedImage';
@@ -67,73 +68,85 @@ const CourseCard = React.memo(({ course }: { course: any }) => (
 CourseCard.displayName = 'CourseCard';
 
 const FAQ_ITEMS = [
-    { q: "Comment choisir la meilleure auto-école ?", a: "Comparez les tarifs, les avis des anciens élèves, le taux de réussite et la proximité géographique. Notre plateforme vous permet de filtrer selon tous ces critères." },
-    { q: "Combien coûte le permis de conduire en Tunisie ?", a: "Le coût moyen varie entre 600 et 900 TND selon la région et le nombre d'heures de conduite nécessaires. Consultez notre page Tarifs pour des estimations détaillées." },
-    { q: "Peut-on passer le code en ligne ?", a: "Oui ! Notre plateforme propose des examens blancs conformes aux normes tunisiennes, avec des vidéos 3D interactives pour vous préparer efficacement depuis chez vous." },
-    { q: "Combien de temps faut-il pour obtenir son permis ?", a: "En moyenne, il faut compter entre 2 et 4 mois. Cela dépend de votre rythme d'apprentissage et de la disponibilité des créneaux de conduite." },
-    { q: "Quelle est la durée de validité du code de la route ?", a: "Le code de la route est valable 2 ans à compter de la date d'obtention. Au-delà, vous devrez repasser l'examen théorique." },
+    { q: "Comment choisir la meilleure auto-école ?", a: "Pour choisir la meilleure auto-école, comparez les tarifs, consultez les avis des anciens élèves, vérifiez la proximité géographique et les horaires de disponibilité. mtf Auto école vous aide à comparer toutes ces informations en un coup d'œil." },
+    { q: "Combien coûte le permis de conduire en Tunisie ?", a: "Le prix du permis de conduire varie entre 1500 et 2000 dinars selon l'auto-école et la formule choisie (code + conduite). Ce tarif inclut généralement les cours de code, 35h de conduite en moyenne et les frais d'examen." },
+    { q: "Peut-on passer le code en ligne ?", a: "Oui, de nombreuses auto-écoles proposent désormais des formations au code en ligne. mtf Auto école propose également des cours de code interactifs et des tests blancs pour vous préparer efficacement à l'examen théorique." },
+    { q: "Combien de temps faut-il pour obtenir son permis ?", a: "En moyenne, il faut 2 à 4 mois pour obtenir son permis de conduire en Tunisie, selon votre rythme d'apprentissage et la disponibilité de votre auto-école." },
+    { q: "Quelle est la durée de validité du code de la route ?", a: "Une fois obtenu, le code de la route est valable 3 ans en Tunisie. Pendant cette période, vous devez passer et réussir l'examen pratique de conduite." },
 ];
+
+function FAQItem({ item, isOpen, onToggle }: { item: typeof FAQ_ITEMS[0]; isOpen: boolean; onToggle: () => void }) {
+    return (
+        <div
+            style={{
+                border: '1px solid',
+                borderColor: isOpen ? 'rgba(16, 185, 129, 0.3)' : '#e5e7eb',
+                borderRadius: '1rem',
+                overflow: 'hidden',
+                background: '#fff',
+                transition: 'border-color 0.2s ease',
+            }}
+        >
+            <button
+                onClick={onToggle}
+                style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    width: '100%', padding: '24px', textAlign: 'left', gap: '16px',
+                    background: 'transparent', border: 'none', cursor: 'pointer',
+                }}
+            >
+                <span style={{ fontWeight: 700, color: 'var(--clr-text)', fontSize: '15px' }}>{item.q}</span>
+                <ChevronDown
+                    size={20}
+                    style={{
+                        flexShrink: 0,
+                        color: isOpen ? 'var(--clr-primary)' : 'var(--clr-text-light)',
+                        transition: 'transform 0.3s ease, color 0.3s ease',
+                        transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    }}
+                />
+            </button>
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        style={{ overflow: 'hidden' }}
+                    >
+                        <p style={{ padding: '0 24px 24px', margin: 0, color: 'var(--clr-text-light)', fontSize: '0.875rem', lineHeight: 1.7 }}>
+                            {item.a}
+                        </p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
 
 function FAQSection() {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     return (
-        <section style={{ padding: 'var(--space-16) 0' }}>
-            <div className="container" style={{ maxWidth: 800, margin: '0 auto' }}>
+        <section style={{ padding: 'var(--space-16) 0', background: 'var(--clr-surface)', borderTop: '1px solid var(--clr-border)' }}>
+            <div className="container" style={{ maxWidth: 768, margin: '0 auto' }}>
                 <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Questions fréquentes</h2>
-                    <p style={{ color: 'var(--clr-text-light)', maxWidth: 600, margin: 'var(--space-4) auto 0' }}>
+                    <h2 style={{ fontSize: 'clamp(1.875rem, 4vw, 2.5rem)', fontWeight: 800, color: 'var(--clr-text)', letterSpacing: '-0.02em', marginBottom: '12px' }}>Questions fréquentes</h2>
+                    <p style={{ color: 'var(--clr-text-light)', fontSize: '1rem' }}>
                         Toutes les réponses à vos questions sur l'apprentissage de la conduite et le permis
                     </p>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                    {FAQ_ITEMS.map((item, i) => {
-                        const isOpen = openIndex === i;
-                        return (
-                            <div
-                                key={i}
-                                style={{
-                                    background: 'var(--clr-surface)',
-                                    borderRadius: 'var(--radius-lg)',
-                                    border: isOpen ? '1px solid var(--clr-primary)' : '1px solid var(--clr-border)',
-                                    transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-                                    boxShadow: isOpen ? '0 4px 14px rgba(16, 185, 129, 0.08)' : 'none',
-                                    overflow: 'hidden'
-                                }}
-                            >
-                                <button
-                                    onClick={() => setOpenIndex(isOpen ? null : i)}
-                                    style={{
-                                        width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                                        padding: 'var(--space-5) var(--space-6)',
-                                        background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left'
-                                    }}
-                                >
-                                    <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--clr-text)' }}>{item.q}</span>
-                                    <ChevronDown
-                                        size={20}
-                                        style={{
-                                            color: 'var(--clr-text-light)', flexShrink: 0, marginLeft: 'var(--space-4)',
-                                            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                                            transition: 'transform 0.3s ease'
-                                        }}
-                                    />
-                                </button>
-                                <div style={{
-                                    maxHeight: isOpen ? 200 : 0,
-                                    opacity: isOpen ? 1 : 0,
-                                    overflow: 'hidden',
-                                    transition: 'max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease',
-                                    padding: isOpen ? '0 var(--space-6) var(--space-5)' : '0 var(--space-6) 0'
-                                }}>
-                                    <p style={{ margin: 0, color: 'var(--clr-text-light)', fontSize: '0.9375rem', lineHeight: 1.6 }}>
-                                        {item.a}
-                                    </p>
-                                </div>
-                            </div>
-                        );
-                    })}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {FAQ_ITEMS.map((item, i) => (
+                        <FAQItem
+                            key={i}
+                            item={item}
+                            isOpen={openIndex === i}
+                            onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+                        />
+                    ))}
                 </div>
             </div>
         </section>
