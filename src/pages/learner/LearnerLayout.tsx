@@ -114,7 +114,7 @@ export default function LearnerLayout() {
                 </div>
             </header>
 
-            <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+            <div style={{ display: 'flex', flex: 1, overflow: 'hidden', minHeight: 0 }}>
                 {/* DRAWER / SIDEBAR */}
                 <AnimatePresence initial={false}>
                     {isDrawerOpen && (
@@ -123,9 +123,9 @@ export default function LearnerLayout() {
                             animate={{ width: 280, opacity: 1 }}
                             exit={{ width: 0, opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            style={{ borderRight: '1px solid #e2e8f0', background: '#fff', display: 'flex', flexDirection: 'column', overflowY: 'auto', flexShrink: 0 }}
+                            style={{ borderRight: '1px solid #e2e8f0', background: '#fff', display: 'flex', flexDirection: 'column', height: '100%', flexShrink: 0 }}
                         >
-                            <div style={{ padding: '32px 24px', width: 280 }}>
+                            <div style={{ padding: '32px 24px', width: 280, overflowY: 'auto', flex: 1 }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                                     <h2 style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Mon Étude</h2>
                                 </div>
@@ -150,7 +150,7 @@ export default function LearnerLayout() {
                 </AnimatePresence>
 
                 {/* MAIN CONTENT NESTED */}
-                <main style={{ flex: 1, padding: '32px 32px 64px', overflowY: 'auto' }}>
+                <main style={{ flex: 1, padding: '32px 32px 64px', overflowY: 'auto', minHeight: 0 }}>
                     <div style={{ maxWidth: 1000, margin: '0 auto', width: '100%' }}>
                         <Outlet />
                     </div>
