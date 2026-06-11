@@ -80,14 +80,7 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
-            {
-                path: 'dashboard',
-                element: (
-                    <Suspense fallback={<PageSkeleton />}>
-                        <StudentDashboard />
-                    </Suspense>
-                ),
-            },
+
             {
                 path: 'ecoles',
                 element: (
@@ -112,22 +105,7 @@ const router = createBrowserRouter([
                     </Suspense>
                 ),
             },
-            {
-                path: 'admin',
-                element: (
-                    <Suspense fallback={<PageSkeleton />}>
-                        <AdminDashboard />
-                    </Suspense>
-                ),
-            },
-            {
-                path: 'teacher',
-                element: (
-                    <Suspense fallback={<PageSkeleton />}>
-                        <TeacherDashboard />
-                    </Suspense>
-                ),
-            },
+
         ],
     },
     // Auth routes typically don't share the main layout (or have a simplified one)
@@ -138,6 +116,39 @@ const router = createBrowserRouter([
                 <ScrollRestoration />
                 <Suspense fallback={<PageSkeleton />}>
                     <Login />
+                </Suspense>
+            </>
+        ),
+    },
+    {
+        path: '/dashboard',
+        element: (
+            <>
+                <ScrollRestoration />
+                <Suspense fallback={<PageSkeleton />}>
+                    <StudentDashboard />
+                </Suspense>
+            </>
+        ),
+    },
+    {
+        path: '/admin',
+        element: (
+            <>
+                <ScrollRestoration />
+                <Suspense fallback={<PageSkeleton />}>
+                    <AdminDashboard />
+                </Suspense>
+            </>
+        ),
+    },
+    {
+        path: '/teacher',
+        element: (
+            <>
+                <ScrollRestoration />
+                <Suspense fallback={<PageSkeleton />}>
+                    <TeacherDashboard />
                 </Suspense>
             </>
         ),
