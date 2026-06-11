@@ -27,7 +27,7 @@ export default function LearnerLayout() {
     ];
 
     return (
-        <PageTransition style={{ height: '100vh', overflow: 'hidden', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
+        <PageTransition style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
             <Helmet>
                 <title>Mon Espace | mtf Auto-école</title>
             </Helmet>
@@ -114,7 +114,7 @@ export default function LearnerLayout() {
                 </div>
             </header>
 
-            <div style={{ display: 'flex', flex: 1, overflow: 'hidden', minHeight: 0 }}>
+            <div style={{ display: 'flex', flex: 1, position: 'relative' }}>
                 {/* DRAWER / SIDEBAR */}
                 <AnimatePresence initial={false}>
                     {isDrawerOpen && (
@@ -123,7 +123,11 @@ export default function LearnerLayout() {
                             animate={{ width: 280, opacity: 1 }}
                             exit={{ width: 0, opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            style={{ borderRight: '1px solid #e2e8f0', background: '#fff', display: 'flex', flexDirection: 'column', height: '100%', flexShrink: 0 }}
+                            style={{
+                                position: 'sticky', top: 64, height: 'calc(100vh - 64px)',
+                                borderRight: '1px solid #e2e8f0', background: '#fff',
+                                display: 'flex', flexDirection: 'column', flexShrink: 0, zIndex: 40
+                            }}
                         >
                             <div style={{ padding: '32px 24px', width: 280, overflowY: 'auto', flex: 1 }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
@@ -150,7 +154,7 @@ export default function LearnerLayout() {
                 </AnimatePresence>
 
                 {/* MAIN CONTENT NESTED */}
-                <main style={{ flex: 1, padding: '32px 32px 64px', overflowY: 'auto', minHeight: 0 }}>
+                <main style={{ flex: 1, padding: '32px 32px 64px' }}>
                     <div style={{ maxWidth: 1000, margin: '0 auto', width: '100%' }}>
                         <Outlet />
                     </div>
