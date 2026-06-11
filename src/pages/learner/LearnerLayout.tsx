@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Bell, ChevronDown, User, Settings, LogOut, Play,
-    FileText, Download, Star, Menu, X, MessageSquare
+    FileText, Download, Star, Menu, X, MessageSquare, Sparkles, MessageCircle
 } from 'lucide-react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import PageTransition from '@/components/PageTransition';
@@ -25,6 +25,7 @@ export default function LearnerLayout() {
         { path: '/dashboard/videos', label: "Vidéos (Leçons)", icon: Play },
         { path: '/dashboard/exams', label: "Examens Blancs", icon: FileText },
         { path: '/dashboard/pdfs', label: "Fiches PDF", icon: Download },
+        { path: '/dashboard/chat', label: "Messagerie", icon: MessageCircle },
     ];
 
     return (
@@ -178,24 +179,29 @@ export default function LearnerLayout() {
                                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                                style={{ width: 340, height: 450, background: '#fff', borderRadius: 20, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+                                style={{ width: 340, height: 450, background: '#fff', borderRadius: 24, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
                             >
-                                <div style={{ background: '#3b82f6', color: '#fff', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <div style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#fff', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                        <div style={{ width: 10, height: 10, background: '#10b981', borderRadius: '50%', border: '2px solid #3b82f6' }} />
+                                        <div style={{ width: 36, height: 36, background: 'rgba(255,255,255,0.2)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Sparkles size={20} fill="currentColor" />
+                                        </div>
                                         <div>
-                                            <div style={{ fontWeight: 700, fontSize: '0.9375rem' }}>Moniteur Tarek</div>
-                                            <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>En ligne</div>
+                                            <div style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: '-0.01em' }}>IA CodeDrive</div>
+                                            <div style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 500 }}>Assistant Virtuel</div>
                                         </div>
                                     </div>
-                                    <button onClick={() => setIsChatOpen(false)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={20} /></button>
+                                    <button onClick={() => setIsChatOpen(false)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.8, transition: 'opacity 0.2s' }}><X size={20} /></button>
                                 </div>
-                                <div style={{ flex: 1, background: '#f8fafc', padding: 16, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-                                    <div style={{ alignSelf: 'flex-start', background: '#fff', padding: '10px 14px', borderRadius: 16, borderBottomLeftRadius: 4, fontSize: '0.875rem', color: '#475569', border: '1px solid #e2e8f0' }}>Bonjour ! Prêt pour de nouveaux examens blancs ?</div>
+                                <div style={{ flex: 1, background: '#f8fafc', padding: 20, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                                    <div style={{ alignSelf: 'flex-start', background: '#fff', padding: '14px 16px', borderRadius: 16, borderBottomLeftRadius: 4, fontSize: '0.875rem', color: '#334155', border: '1px solid #e2e8f0', lineHeight: 1.5, boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
+                                        Bonjour ! Je suis votre assistant virtuel IA. 🤖<br /><br />
+                                        Avez-vous une question concernant une leçon, une règle de priorité, ou un panneau spécifique ?
+                                    </div>
                                 </div>
                                 <div style={{ padding: 16, background: '#fff', borderTop: '1px solid #e2e8f0' }}>
                                     <div style={{ background: '#f1f5f9', borderRadius: 24, padding: '8px 16px', display: 'flex', alignItems: 'center' }}>
-                                        <input type="text" placeholder="Posez une question..." style={{ border: 'none', background: 'transparent', outline: 'none', flex: 1, fontSize: '0.875rem' }} />
+                                        <input type="text" placeholder="Posez votre question à l'IA..." style={{ border: 'none', background: 'transparent', outline: 'none', flex: 1, fontSize: '0.875rem', color: '#0f172a' }} />
                                     </div>
                                 </div>
                             </motion.div>
@@ -205,12 +211,12 @@ export default function LearnerLayout() {
                     <button
                         onClick={() => setIsChatOpen(!isChatOpen)}
                         style={{
-                            width: 56, height: 56, borderRadius: '50%', background: '#3b82f6', color: '#fff',
-                            border: 'none', boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.5)',
+                            width: 60, height: 60, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#fff',
+                            border: 'none', boxShadow: '0 10px 25px -5px rgba(99, 102, 241, 0.5)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s'
                         }}
                     >
-                        {isChatOpen ? <X size={24} /> : <MessageSquare size={24} fill="currentColor" />}
+                        {isChatOpen ? <X size={24} /> : <Sparkles size={26} fill="currentColor" />}
                     </button>
                 </div>
             </div>

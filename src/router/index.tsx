@@ -24,6 +24,7 @@ const DashboardOverview = lazy(() => import('@/pages/learner/DashboardOverview')
 const DashboardVideos = lazy(() => import('@/pages/learner/DashboardVideos'));
 const DashboardExams = lazy(() => import('@/pages/learner/DashboardExams'));
 const DashboardPDFs = lazy(() => import('@/pages/learner/DashboardPDFs'));
+const DashboardChat = lazy(() => import('@/pages/learner/DashboardChat'));
 
 // We create a map of import functions to feed to the NavBar for prefetching
 const prefetchRoutes = {
@@ -141,6 +142,7 @@ const router = createBrowserRouter([
             { path: 'videos', element: <Suspense fallback={<PageSkeleton />}><DashboardVideos /></Suspense> },
             { path: 'exams', element: <Suspense fallback={<PageSkeleton />}><DashboardExams /></Suspense> },
             { path: 'pdfs', element: <Suspense fallback={<PageSkeleton />}><DashboardPDFs /></Suspense> },
+            { path: 'chat', element: <Suspense fallback={<PageSkeleton />}><DashboardChat /></Suspense> },
         ]
     },
     {
