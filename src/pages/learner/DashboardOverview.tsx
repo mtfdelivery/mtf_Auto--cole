@@ -1,23 +1,26 @@
 import { Play, TrendingUp, Flame, FileText, AlertCircle, ArrowRight, BookOpen, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-// MOCK DATA for OVERVIEW
-const userProfile = {
-    firstName: "Aziz",
-    isPremium: true,
-    examDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-    streak: 5,
-    avgScore: 73,
-    examsTaken: 12,
-    videosWatched: 8,
-    totalVideos: 12,
-    weakAreas: [
-        { topic: "Signalisation", score: 43, videoId: 2 },
-        { topic: "Priorités et Intersections", score: 61, videoId: 4 }
-    ]
-};
+import { useStudentProgress } from '@/hooks/useStudentProgress';
 
 export default function DashboardOverview() {
+    const { data: progress, isLoading } = useStudentProgress('student-1');
+
+    // Default or Fallback Profile mapped from progress
+    const userProfile = {
+        firstName: "Étudiant",
+        isPremium: true,
+        examDate: new Date(progress?.nextExamDate || Date.now() + 14 * 24 * 60 * 60 * 1000),
+        streak: 5,
+        avgScore: progress?.averageScore || 0,
+        examsTaken: 12,
+        videosWatched: progress?.completedLessons || 0,
+        totalVideos: progress?.totalLessons || 0,
+        weakAreas: [
+            { topic: "Signalisation", score: 43, videoId: 2 },
+            { topic: "Priorités et Intersections", score: 61, videoId: 4 }
+        ]
+    };
+
     const daysUntilExam = Math.ceil((userProfile.examDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
 
     // Clean, professional color scheme mapping

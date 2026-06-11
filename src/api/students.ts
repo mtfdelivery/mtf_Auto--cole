@@ -21,7 +21,40 @@ const mockLessonSlots: LessonSlot[] = [
     { id: 'ls-8', date: '2026-06-16', startTime: '15:00', endTime: '16:30', instructorId: '5', instructorName: 'Nabil Khelifi', available: true, type: 'conduite' },
 ];
 
+import { supabase } from '@/lib/supabase';
+
 export async function fetchStudentProgress(studentId: string): Promise<StudentProgress> {
+    try {
+        // Attempt to fetch from Supabase LIVE schema
+        const { data: profile, error } = await supabase
+            .from('profiles')
+            .select(`
+                average_score,
+                exams_taken,
+                videos_watched,
+                total_videos,
+                exam_date
+            `)
+            .eq('id', studentId)
+            .single();
+
+        if (!error && profile) {
+            return {
+                studentId,
+                codeProgress: 0,
+                conduiteProgress: 0,
+                totalLessons: profile.total_videos || 30,
+                completedLessons: profile.videos_watched || 0,
+                averageScore: profile.average_score || 0,
+                nextExamDate: profile.exam_date || '2026-07-01',
+            };
+        }
+
+    } catch (err) {
+        console.warn("Supabase fetch failed, falling back to mock data.", err);
+    }
+
+    // Fallback if Supabase fails (e.g., tables not created yet)
     await new Promise((r) => setTimeout(r, 400));
     return { ...mockProgress, studentId };
 }
