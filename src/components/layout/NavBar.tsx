@@ -36,6 +36,10 @@ export default function NavBar({ routes }: NavBarProps) {
         routes['/login']?.();
     }, [routes]);
 
+    const prefetchEcoles = useCallback(() => {
+        routes['/ecoles']?.();
+    }, [routes]);
+
     const toggleMenu = () => setMobileMenuOpen((p) => !p);
 
     return (
@@ -103,6 +107,13 @@ export default function NavBar({ routes }: NavBarProps) {
                         className="desktop-nav"
                     >
                         <NavLink
+                            to="/ecoles"
+                            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                            onMouseEnter={prefetchEcoles}
+                        >
+                            Trouver une école
+                        </NavLink>
+                        <NavLink
                             to="/courses"
                             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                             onMouseEnter={prefetchCourses}
@@ -110,11 +121,10 @@ export default function NavBar({ routes }: NavBarProps) {
                             Formations
                         </NavLink>
                         <NavLink
-                            to="/instructors"
+                            to="/learner/exam"
                             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                            onMouseEnter={prefetchInstructors}
                         >
-                            Moniteurs
+                            Examen Blanc
                         </NavLink>
                         <NavLink
                             to="/pricing"
@@ -182,10 +192,15 @@ export default function NavBar({ routes }: NavBarProps) {
                 </div>
                 <nav style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
                     <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Accueil</NavLink>
+                    <NavLink to="/ecoles" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Trouver une école</NavLink>
                     <NavLink to="/courses" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Formations</NavLink>
-                    <NavLink to="/instructors" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Moniteurs</NavLink>
+                    <NavLink to="/learner/exam" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Examen Blanc</NavLink>
                     <NavLink to="/pricing" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Tarifs</NavLink>
                     <NavLink to="/contact" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Contact</NavLink>
+                    <div style={{ borderTop: '1px solid var(--clr-border)', margin: 'var(--space-4) 0' }} />
+                    <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Mon Espace</NavLink>
+                    <NavLink to="/teacher" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Espace Moniteur</NavLink>
+                    <NavLink to="/admin" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} onClick={toggleMenu}>Administration</NavLink>
                     <div style={{ borderTop: '1px solid var(--clr-border)', margin: 'var(--space-4) 0' }} />
                     <NavLink to="/login" className="btn btn-outline" style={{ justifyContent: 'center' }} onClick={toggleMenu}>Connexion</NavLink>
                     <NavLink to="/signup" className="btn btn-primary" style={{ justifyContent: 'center' }} onClick={toggleMenu}>S'inscrire</NavLink>
