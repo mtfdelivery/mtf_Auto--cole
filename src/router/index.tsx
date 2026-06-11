@@ -17,6 +17,7 @@ const FindSchool = lazy(() => import('@/pages/FindSchool'));
 const ExamSimulator = lazy(() => import('@/pages/learner/ExamSimulator'));
 const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
 const TeacherDashboard = lazy(() => import('@/pages/TeacherDashboard'));
+const SchoolDetails = lazy(() => import('@/pages/SchoolDetails'));
 
 // We create a map of import functions to feed to the NavBar for prefetching
 const prefetchRoutes = {
@@ -92,6 +93,14 @@ const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<PageSkeleton />}>
                         <FindSchool />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'ecoles/:slug',
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <SchoolDetails />
                     </Suspense>
                 ),
             },
