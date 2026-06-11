@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
-import React, { useMemo } from 'react';
-import { ArrowRight, Star, ShieldCheck, Video } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { ArrowRight, Star, ShieldCheck, Video, ChevronDown } from 'lucide-react';
 import PageTransition from '@/components/PageTransition';
 import OptimizedImage from '@/components/OptimizedImage';
 import LazyVideo from '@/components/LazyVideo';
@@ -65,6 +65,80 @@ const CourseCard = React.memo(({ course }: { course: any }) => (
     </div>
 ));
 CourseCard.displayName = 'CourseCard';
+
+const FAQ_ITEMS = [
+    { q: "Comment choisir la meilleure auto-école ?", a: "Comparez les tarifs, les avis des anciens élèves, le taux de réussite et la proximité géographique. Notre plateforme vous permet de filtrer selon tous ces critères." },
+    { q: "Combien coûte le permis de conduire en Tunisie ?", a: "Le coût moyen varie entre 600 et 900 TND selon la région et le nombre d'heures de conduite nécessaires. Consultez notre page Tarifs pour des estimations détaillées." },
+    { q: "Peut-on passer le code en ligne ?", a: "Oui ! Notre plateforme propose des examens blancs conformes aux normes tunisiennes, avec des vidéos 3D interactives pour vous préparer efficacement depuis chez vous." },
+    { q: "Combien de temps faut-il pour obtenir son permis ?", a: "En moyenne, il faut compter entre 2 et 4 mois. Cela dépend de votre rythme d'apprentissage et de la disponibilité des créneaux de conduite." },
+    { q: "Quelle est la durée de validité du code de la route ?", a: "Le code de la route est valable 2 ans à compter de la date d'obtention. Au-delà, vous devrez repasser l'examen théorique." },
+];
+
+function FAQSection() {
+    const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+    return (
+        <section style={{ padding: 'var(--space-16) 0' }}>
+            <div className="container" style={{ maxWidth: 800, margin: '0 auto' }}>
+                <div style={{ textAlign: 'center', marginBottom: 'var(--space-12)' }}>
+                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Questions fréquentes</h2>
+                    <p style={{ color: 'var(--clr-text-light)', maxWidth: 600, margin: 'var(--space-4) auto 0' }}>
+                        Toutes les réponses à vos questions sur l'apprentissage de la conduite et le permis
+                    </p>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                    {FAQ_ITEMS.map((item, i) => {
+                        const isOpen = openIndex === i;
+                        return (
+                            <div
+                                key={i}
+                                style={{
+                                    background: 'var(--clr-surface)',
+                                    borderRadius: 'var(--radius-lg)',
+                                    border: isOpen ? '1px solid var(--clr-primary)' : '1px solid var(--clr-border)',
+                                    transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                                    boxShadow: isOpen ? '0 4px 14px rgba(16, 185, 129, 0.08)' : 'none',
+                                    overflow: 'hidden'
+                                }}
+                            >
+                                <button
+                                    onClick={() => setOpenIndex(isOpen ? null : i)}
+                                    style={{
+                                        width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                                        padding: 'var(--space-5) var(--space-6)',
+                                        background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left'
+                                    }}
+                                >
+                                    <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--clr-text)' }}>{item.q}</span>
+                                    <ChevronDown
+                                        size={20}
+                                        style={{
+                                            color: 'var(--clr-text-light)', flexShrink: 0, marginLeft: 'var(--space-4)',
+                                            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                                            transition: 'transform 0.3s ease'
+                                        }}
+                                    />
+                                </button>
+                                <div style={{
+                                    maxHeight: isOpen ? 200 : 0,
+                                    opacity: isOpen ? 1 : 0,
+                                    overflow: 'hidden',
+                                    transition: 'max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease',
+                                    padding: isOpen ? '0 var(--space-6) var(--space-5)' : '0 var(--space-6) 0'
+                                }}>
+                                    <p style={{ margin: 0, color: 'var(--clr-text-light)', fontSize: '0.9375rem', lineHeight: 1.6 }}>
+                                        {item.a}
+                                    </p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </section>
+    );
+}
 
 export default function Home() {
     const { data: instructors, isLoading: loadingInstructors } = useInstructors();
@@ -199,6 +273,9 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+            {/* FAQ Section */}
+            <FAQSection />
 
         </PageTransition>
     );
