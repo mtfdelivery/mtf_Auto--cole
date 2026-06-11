@@ -34,7 +34,7 @@ export default function LearnerLayout() {
 
             {/* 1. Navigation Bar (sticky) */}
             <header style={{
-                flexShrink: 0, zIndex: 50, background: 'rgba(255,255,255,0.9)',
+                position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,255,255,0.9)',
                 backdropFilter: 'blur(12px)', borderBottom: '1px solid #e2e8f0',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '0 24px', height: 64
