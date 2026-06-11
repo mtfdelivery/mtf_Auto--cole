@@ -51,6 +51,7 @@ export default function LearnerLayout() {
         { path: '/dashboard/exams', label: "Examens Blancs", icon: FileText },
         { path: '/dashboard/pdfs', label: "Fiches PDF", icon: Download },
         { path: '/dashboard/chat', label: "Messagerie", icon: MessageCircle },
+        { path: '/dashboard/profile', label: "Mon Profil", icon: Settings },
     ];
 
     return (
@@ -124,10 +125,10 @@ export default function LearnerLayout() {
                                         )}
                                     </div>
                                     <div style={{ padding: 8 }}>
-                                        <Link to="/settings" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', color: '#475569', textDecoration: 'none', borderRadius: 8, fontSize: '14px', fontWeight: 500 }}>
+                                        <Link to="/dashboard/profile" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', color: '#475569', textDecoration: 'none', borderRadius: 8, fontSize: '14px', fontWeight: 500 }}>
                                             <User size={16} /> Mon Profil
                                         </Link>
-                                        <Link to="/settings" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', color: '#475569', textDecoration: 'none', borderRadius: 8, fontSize: '14px', fontWeight: 500 }}>
+                                        <Link to="/dashboard/profile" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', color: '#475569', textDecoration: 'none', borderRadius: 8, fontSize: '14px', fontWeight: 500 }}>
                                             <Settings size={16} /> Paramètres
                                         </Link>
                                         <button style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', color: '#ef4444', background: 'transparent', border: 'none', width: '100%', borderRadius: 8, fontSize: '14px', fontWeight: 500, cursor: 'pointer', textAlign: 'left' }}>
