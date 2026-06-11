@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Bell, ChevronDown, User, Settings, LogOut, Play,
-    FileText, Download, Star, Menu, X
+    FileText, Download, Star, Menu, X, MessageSquare
 } from 'lucide-react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import PageTransition from '@/components/PageTransition';
@@ -17,6 +17,7 @@ const userProfile = {
 export default function LearnerLayout() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+    const [isChatOpen, setIsChatOpen] = useState(false);
     const location = useLocation();
 
     const navItems = [
@@ -115,43 +116,52 @@ export default function LearnerLayout() {
             </header>
 
             <div style={{ display: 'flex', flex: 1, position: 'relative' }}>
-                {/* DRAWER / SIDEBAR */}
-                <AnimatePresence initial={false}>
-                    {isDrawerOpen && (
-                        <motion.aside
-                            initial={{ width: 0, opacity: 0 }}
-                            animate={{ width: 280, opacity: 1 }}
-                            exit={{ width: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            style={{
-                                position: 'sticky', top: 64, height: 'calc(100vh - 64px)',
-                                borderRight: '1px solid #e2e8f0', background: '#fff',
-                                display: 'flex', flexDirection: 'column', flexShrink: 0, zIndex: 40
-                            }}
-                        >
-                            <div style={{ padding: '32px 24px', width: 280, overflowY: 'auto', flex: 1 }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                                    <h2 style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Mon Étude</h2>
-                                </div>
-                                <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                                    {navItems.map((item) => {
-                                        const isActive = location.pathname === item.path;
-                                        return (
-                                            <Link key={item.path} to={item.path} style={{
-                                                display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 8,
-                                                background: isActive ? '#ecfdf5' : 'transparent',
-                                                color: isActive ? '#10b981' : '#475569',
-                                                fontWeight: isActive ? 700 : 600, textDecoration: 'none'
-                                            }}>
-                                                <item.icon size={18} /> {item.label}
-                                            </Link>
-                                        );
-                                    })}
-                                </nav>
-                            </div>
-                        </motion.aside>
-                    )}
-                </AnimatePresence>
+                {/* DRAWER / SIDEBAR (Mini-variant supported) */}
+                <motion.aside
+                    animate={{ width: isDrawerOpen ? 280 : 80 }}
+                    transition={{ duration: 0.3, ease: 'circOut' }}
+                    style={{
+                        position: 'sticky', top: 64, height: 'calc(100vh - 64px)',
+                        borderRight: '1px solid #e2e8f0', background: '#fff',
+                        display: 'flex', flexDirection: 'column', flexShrink: 0, zIndex: 40, overflow: 'hidden'
+                    }}
+                >
+                    <div style={{ padding: isDrawerOpen ? '32px 24px' : '32px 16px', overflowY: 'auto', flex: 1, overflowX: 'hidden' }}>
+                        <div style={{ display: 'flex', justifyContent: isDrawerOpen ? 'space-between' : 'center', alignItems: 'center', marginBottom: 24, height: 20 }}>
+                            <AnimatePresence mode="wait">
+                                {isDrawerOpen ? (
+                                    <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.1 }} style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0, whiteSpace: 'nowrap' }}>Mon Étude</motion.h2>
+                                ) : (
+                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ width: 4, height: 4, borderRadius: '50%', background: '#cbd5e1' }} />
+                                )}
+                            </AnimatePresence>
+                        </div>
+                        <nav style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            {navItems.map((item) => {
+                                const isActive = location.pathname === item.path;
+                                return (
+                                    <Link key={item.path} to={item.path} style={{
+                                        display: 'flex', alignItems: 'center', gap: 12, padding: isDrawerOpen ? '10px 12px' : '12px', borderRadius: 12,
+                                        background: isActive ? '#ecfdf5' : 'transparent',
+                                        color: isActive ? '#10b981' : '#475569',
+                                        fontWeight: isActive ? 700 : 600, textDecoration: 'none',
+                                        justifyContent: isDrawerOpen ? 'flex-start' : 'center',
+                                        transition: 'background 0.2s'
+                                    }}>
+                                        <item.icon size={20} style={{ flexShrink: 0 }} />
+                                        <AnimatePresence>
+                                            {isDrawerOpen && (
+                                                <motion.span initial={{ opacity: 0, width: 0 }} animate={{ opacity: 1, width: 'auto' }} exit={{ opacity: 0, width: 0 }} style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                                                    {item.label}
+                                                </motion.span>
+                                            )}
+                                        </AnimatePresence>
+                                    </Link>
+                                );
+                            })}
+                        </nav>
+                    </div>
+                </motion.aside>
 
                 {/* MAIN CONTENT NESTED */}
                 <main style={{ flex: 1, padding: '32px 32px 64px' }}>
@@ -159,6 +169,50 @@ export default function LearnerLayout() {
                         <Outlet />
                     </div>
                 </main>
+
+                {/* FLOATING ACTION BUTTON CHAT WIDGET */}
+                <div style={{ position: 'fixed', bottom: 32, right: 32, zIndex: 100, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 16 }}>
+                    <AnimatePresence>
+                        {isChatOpen && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                                style={{ width: 340, height: 450, background: '#fff', borderRadius: 20, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+                            >
+                                <div style={{ background: '#3b82f6', color: '#fff', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                        <div style={{ width: 10, height: 10, background: '#10b981', borderRadius: '50%', border: '2px solid #3b82f6' }} />
+                                        <div>
+                                            <div style={{ fontWeight: 700, fontSize: '0.9375rem' }}>Moniteur Tarek</div>
+                                            <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>En ligne</div>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => setIsChatOpen(false)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={20} /></button>
+                                </div>
+                                <div style={{ flex: 1, background: '#f8fafc', padding: 16, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                                    <div style={{ alignSelf: 'flex-start', background: '#fff', padding: '10px 14px', borderRadius: 16, borderBottomLeftRadius: 4, fontSize: '0.875rem', color: '#475569', border: '1px solid #e2e8f0' }}>Bonjour ! Prêt pour de nouveaux examens blancs ?</div>
+                                </div>
+                                <div style={{ padding: 16, background: '#fff', borderTop: '1px solid #e2e8f0' }}>
+                                    <div style={{ background: '#f1f5f9', borderRadius: 24, padding: '8px 16px', display: 'flex', alignItems: 'center' }}>
+                                        <input type="text" placeholder="Posez une question..." style={{ border: 'none', background: 'transparent', outline: 'none', flex: 1, fontSize: '0.875rem' }} />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <button
+                        onClick={() => setIsChatOpen(!isChatOpen)}
+                        style={{
+                            width: 56, height: 56, borderRadius: '50%', background: '#3b82f6', color: '#fff',
+                            border: 'none', boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.5)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s'
+                        }}
+                    >
+                        {isChatOpen ? <X size={24} /> : <MessageSquare size={24} fill="currentColor" />}
+                    </button>
+                </div>
             </div>
         </PageTransition>
     );
