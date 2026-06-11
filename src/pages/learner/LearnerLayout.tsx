@@ -16,6 +16,8 @@ const userProfile = {
 
 export default function LearnerLayout() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [notifTab, setNotifTab] = useState<'tous' | 'non lues'>('tous');
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [aiMessages, setAiMessages] = useState<{ text: string; sender: 'ai' | 'user' }[]>([
@@ -52,6 +54,7 @@ export default function LearnerLayout() {
         { path: '/dashboard/exams', label: "Examens Blancs", icon: FileText },
         { path: '/dashboard/pdfs', label: "Fiches PDF", icon: Download },
         { path: '/dashboard/chat', label: "Messagerie", icon: MessageCircle },
+        { path: '/dashboard/assistance', label: "Assistance", icon: Sparkles },
         { path: '/dashboard/profile', label: "Mon Profil", icon: Settings },
     ];
 
@@ -84,10 +87,57 @@ export default function LearnerLayout() {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-                    <button style={{ position: 'relative', background: 'transparent', border: 'none', cursor: 'pointer', color: '#64748b' }}>
-                        <Bell size={22} />
-                        <span style={{ position: 'absolute', top: -2, right: -2, width: 8, height: 8, background: '#ef4444', borderRadius: '50%', border: '2px solid #fff' }} />
-                    </button>
+                    <div style={{ position: 'relative' }}>
+                        <button
+                            onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                            style={{ position: 'relative', background: 'transparent', border: 'none', cursor: 'pointer', color: '#64748b' }}
+                        >
+                            <Bell size={22} />
+                            <span style={{ position: 'absolute', top: -2, right: -2, width: 8, height: 8, background: '#ef4444', borderRadius: '50%', border: '2px solid #fff' }} />
+                        </button>
+
+                        <AnimatePresence>
+                            {isNotificationsOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    style={{
+                                        position: 'absolute', top: 'calc(100% + 12px)', right: 0, width: 340,
+                                        background: '#fff', borderRadius: 12, border: '1px solid #e2e8f0',
+                                        boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)', overflow: 'hidden', zIndex: 100
+                                    }}
+                                >
+                                    <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 700, color: '#3b82f6' }}>Notifications</h3>
+                                        <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#94a3b8' }}>
+                                            <Settings size={20} />
+                                        </button>
+                                    </div>
+
+                                    <div style={{ display: 'flex', borderBottom: '1px solid #e2e8f0' }}>
+                                        <button
+                                            onClick={() => setNotifTab('tous')}
+                                            style={{ flex: 1, padding: '12px 0', background: 'transparent', border: 'none', borderBottom: notifTab === 'tous' ? '2px solid #3b82f6' : '2px solid transparent', color: notifTab === 'tous' ? '#3b82f6' : '#64748b', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', textTransform: 'uppercase' }}
+                                        >
+                                            TOUS
+                                        </button>
+                                        <button
+                                            onClick={() => setNotifTab('non lues')}
+                                            style={{ flex: 1, padding: '12px 0', background: 'transparent', border: 'none', borderBottom: notifTab === 'non lues' ? '2px solid #3b82f6' : '2px solid transparent', color: notifTab === 'non lues' ? '#3b82f6' : '#64748b', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', textTransform: 'uppercase' }}
+                                        >
+                                            NON LUES
+                                        </button>
+                                    </div>
+
+                                    <div style={{ padding: '48px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#fff' }}>
+                                        <div style={{ width: 64, height: 64, background: '#fffbeb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                                            <Bell size={28} color="#f59e0b" fill="#fcd34d" />
+                                        </div>
+                                        <div style={{ color: '#94a3b8', fontSize: '0.9375rem', fontWeight: 500 }}>Pas de notifications</div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
 
                     <div style={{ position: 'relative' }}>
                         <button
