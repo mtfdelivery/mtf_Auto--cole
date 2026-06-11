@@ -19,6 +19,12 @@ const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
 const TeacherDashboard = lazy(() => import('@/pages/TeacherDashboard'));
 const SchoolDetails = lazy(() => import('@/pages/SchoolDetails'));
 
+const LearnerLayout = lazy(() => import('@/pages/learner/LearnerLayout'));
+const DashboardOverview = lazy(() => import('@/pages/learner/DashboardOverview'));
+const DashboardVideos = lazy(() => import('@/pages/learner/DashboardVideos'));
+const DashboardExams = lazy(() => import('@/pages/learner/DashboardExams'));
+const DashboardPDFs = lazy(() => import('@/pages/learner/DashboardPDFs'));
+
 // We create a map of import functions to feed to the NavBar for prefetching
 const prefetchRoutes = {
     '/': () => import('@/pages/Home'),
@@ -126,10 +132,16 @@ const router = createBrowserRouter([
             <>
                 <ScrollRestoration />
                 <Suspense fallback={<PageSkeleton />}>
-                    <StudentDashboard />
+                    <LearnerLayout />
                 </Suspense>
             </>
         ),
+        children: [
+            { index: true, element: <Suspense fallback={<PageSkeleton />}><DashboardOverview /></Suspense> },
+            { path: 'videos', element: <Suspense fallback={<PageSkeleton />}><DashboardVideos /></Suspense> },
+            { path: 'exams', element: <Suspense fallback={<PageSkeleton />}><DashboardExams /></Suspense> },
+            { path: 'pdfs', element: <Suspense fallback={<PageSkeleton />}><DashboardPDFs /></Suspense> },
+        ]
     },
     {
         path: '/admin',
