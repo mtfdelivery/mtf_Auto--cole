@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Bell, ChevronDown, User, Settings, LogOut, Play,
-    FileText, Download, Star, Menu, X, MessageSquare, Sparkles, MessageCircle
+    FileText, Download, Star, Menu, X, MessageSquare, Sparkles, MessageCircle, Calendar as ReactCalendar
 } from 'lucide-react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import PageTransition from '@/components/PageTransition';
@@ -48,6 +48,7 @@ export default function LearnerLayout() {
     const navItems = [
         { path: '/dashboard', label: "Vue d'ensemble", icon: User },
         { path: '/dashboard/videos', label: "Vidéos (Leçons)", icon: Play },
+        { path: '/dashboard/calendar', label: "Mon Planning", icon: ReactCalendar },
         { path: '/dashboard/exams', label: "Examens Blancs", icon: FileText },
         { path: '/dashboard/pdfs', label: "Fiches PDF", icon: Download },
         { path: '/dashboard/chat', label: "Messagerie", icon: MessageCircle },
