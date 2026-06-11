@@ -96,7 +96,7 @@ export default function DashboardOverview() {
                         <span>Reprendre <span style={{ opacity: 0.8, fontWeight: 500, fontSize: '0.9375rem', marginLeft: 4 }}>Leçon 3</span></span>
                     </motion.button>
                 </div>
-            </section>
+            </motion.section>
 
             {/* 3. PROGRESS GRID */}
             <motion.section variants={itemVariants}>
