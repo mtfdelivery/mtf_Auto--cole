@@ -192,7 +192,7 @@ export default function LearnerLayout() {
 
                 {/* MAIN CONTENT NESTED */}
                 <main style={{ flex: 1, padding: '32px 32px 64px' }}>
-                    <div style={{ maxWidth: 1000, margin: '0 auto', width: '100%' }}>
+                    <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
                         <Outlet />
                     </div>
                 </main>

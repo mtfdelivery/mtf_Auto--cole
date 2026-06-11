@@ -15,7 +15,7 @@ export default function DashboardVideos() {
     const [activeVideoId, setActiveVideoId] = useState(3);
     const [activeTab, setActiveTab] = useState<'overview' | 'resources' | 'quiz' | 'qa'>('overview');
 
-    const activeVideo = videos.find(v => v.id === activeVideoId) || videos[2];
+    const activeVideo = videos.find(v => v.id === activeVideoId) || videos[2]!;
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 350px', gap: 24, alignItems: 'start' }}>
@@ -130,7 +130,7 @@ export default function DashboardVideos() {
             </div>
 
             {/* RIGHT: PLAYLIST SIDEBAR */}
-            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 16, display: 'flex', flexDirection: 'column', height: 'calc(100vh - 128px)', position: 'sticky', top: 64 }}>
+            <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 16, display: 'flex', flexDirection: 'column', height: 'calc(100vh - 160px)', position: 'sticky', top: 96 }}>
                 <div style={{ padding: '24px 20px', borderBottom: '1px solid #e2e8f0' }}>
                     <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#0f172a', margin: 0, marginBottom: 12 }}>Contenu du cours</h2>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.8125rem', fontWeight: 600, color: '#64748b', marginBottom: 8 }}>
