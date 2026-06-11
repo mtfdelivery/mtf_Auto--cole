@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import { queryClient } from './lib/queryClient';
 import { AppRouter } from './router';
 
+import './i18n';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(

@@ -6,6 +6,7 @@ import {
     FileText, Download, Star, Menu, X, MessageSquare, Sparkles, MessageCircle, Calendar as ReactCalendar
 } from 'lucide-react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PageTransition from '@/components/PageTransition';
 
 // Reusing MOCK DATA for layout profile
@@ -15,6 +16,7 @@ const userProfile = {
 };
 
 export default function LearnerLayout() {
+    const { t, i18n } = useTranslation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
     const [notifTab, setNotifTab] = useState<'tous' | 'non lues'>('tous');
@@ -48,14 +50,14 @@ export default function LearnerLayout() {
     };
 
     const navItems = [
-        { path: '/dashboard', label: "Vue d'ensemble", icon: User },
-        { path: '/dashboard/videos', label: "Vidéos (Leçons)", icon: Play },
-        { path: '/dashboard/calendar', label: "Mon Planning", icon: ReactCalendar },
-        { path: '/dashboard/exams', label: "Examens Blancs", icon: FileText },
-        { path: '/dashboard/pdfs', label: "Fiches PDF", icon: Download },
-        { path: '/dashboard/chat', label: "Messagerie", icon: MessageCircle },
-        { path: '/dashboard/assistance', label: "Assistance", icon: Sparkles },
-        { path: '/dashboard/profile', label: "Mon Profil", icon: Settings },
+        { path: '/dashboard', label: t('dashboard.overview'), icon: User },
+        { path: '/dashboard/videos', label: t('dashboard.videos'), icon: Play },
+        { path: '/dashboard/calendar', label: t('dashboard.planning'), icon: ReactCalendar },
+        { path: '/dashboard/exams', label: t('dashboard.exams'), icon: FileText },
+        { path: '/dashboard/pdfs', label: t('dashboard.pdfs'), icon: Download },
+        { path: '/dashboard/chat', label: t('dashboard.chat'), icon: MessageCircle },
+        { path: '/dashboard/assistance', label: t('dashboard.assistance'), icon: Sparkles },
+        { path: '/dashboard/profile', label: t('dashboard.profile'), icon: Settings },
     ];
 
     return (
@@ -182,6 +184,12 @@ export default function LearnerLayout() {
                                         <Link to="/dashboard/profile" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', color: '#475569', textDecoration: 'none', borderRadius: 8, fontSize: '14px', fontWeight: 500 }}>
                                             <Settings size={16} /> Paramètres
                                         </Link>
+                                        <button
+                                            onClick={() => i18n.changeLanguage(i18n.language === 'fr' ? 'ar' : 'fr')}
+                                            style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', color: '#475569', background: 'transparent', border: 'none', width: '100%', borderRadius: 8, fontSize: '14px', fontWeight: 500, cursor: 'pointer', textAlign: 'left' }}
+                                        >
+                                            <span style={{ fontSize: 16 }}>🌍</span> {i18n.language === 'fr' ? 'Passer en Arabe' : 'Passer en Français'}
+                                        </button>
                                         <button style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', color: '#ef4444', background: 'transparent', border: 'none', width: '100%', borderRadius: 8, fontSize: '14px', fontWeight: 500, cursor: 'pointer', textAlign: 'left' }}>
                                             <LogOut size={16} /> Déconnexion
                                         </button>
