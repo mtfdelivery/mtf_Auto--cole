@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Bell, ChevronDown, User, Settings, LogOut, Play,
-    FileText, Download, Star
+    FileText, Download, Star, Menu, X
 } from 'lucide-react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import PageTransition from '@/components/PageTransition';
@@ -16,6 +16,7 @@ const userProfile = {
 
 export default function LearnerLayout() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const location = useLocation();
 
     const navItems = [
@@ -26,19 +27,25 @@ export default function LearnerLayout() {
     ];
 
     return (
-        <PageTransition style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
+        <PageTransition style={{ height: '100vh', overflow: 'hidden', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
             <Helmet>
                 <title>Mon Espace | mtf Auto-école</title>
             </Helmet>
 
             {/* 1. Navigation Bar (sticky) */}
             <header style={{
-                position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,255,255,0.9)',
+                flexShrink: 0, zIndex: 50, background: 'rgba(255,255,255,0.9)',
                 backdropFilter: 'blur(12px)', borderBottom: '1px solid #e2e8f0',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '0 24px', height: 64
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <button
+                        onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        <Menu size={24} />
+                    </button>
                     <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
                         <div style={{ width: 32, height: 32, background: 'var(--clr-primary)', borderRadius: 8, display: 'grid', placeItems: 'center', color: '#fff', fontWeight: 700 }}>m</div>
                         <span style={{ fontWeight: 800, fontSize: '1.25rem', color: '#0f172a', letterSpacing: '-0.02em' }}>
@@ -107,28 +114,40 @@ export default function LearnerLayout() {
                 </div>
             </header>
 
-            <div style={{ display: 'flex', flex: 1 }}>
+            <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
                 {/* DRAWER / SIDEBAR */}
-                <aside style={{ width: 280, borderRight: '1px solid #e2e8f0', background: '#fff', padding: '32px 24px', display: 'flex', flexDirection: 'column', gap: 32 }}>
-                    <div>
-                        <h2 style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>Mon Étude</h2>
-                        <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                            {navItems.map((item) => {
-                                const isActive = location.pathname === item.path;
-                                return (
-                                    <Link key={item.path} to={item.path} style={{
-                                        display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 8,
-                                        background: isActive ? '#ecfdf5' : 'transparent',
-                                        color: isActive ? '#10b981' : '#475569',
-                                        fontWeight: isActive ? 700 : 600, textDecoration: 'none'
-                                    }}>
-                                        <item.icon size={18} /> {item.label}
-                                    </Link>
-                                );
-                            })}
-                        </nav>
-                    </div>
-                </aside>
+                <AnimatePresence initial={false}>
+                    {isDrawerOpen && (
+                        <motion.aside
+                            initial={{ width: 0, opacity: 0 }}
+                            animate={{ width: 280, opacity: 1 }}
+                            exit={{ width: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ borderRight: '1px solid #e2e8f0', background: '#fff', display: 'flex', flexDirection: 'column', overflowY: 'auto', flexShrink: 0 }}
+                        >
+                            <div style={{ padding: '32px 24px', width: 280 }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                                    <h2 style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Mon Étude</h2>
+                                </div>
+                                <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                    {navItems.map((item) => {
+                                        const isActive = location.pathname === item.path;
+                                        return (
+                                            <Link key={item.path} to={item.path} style={{
+                                                display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 8,
+                                                background: isActive ? '#ecfdf5' : 'transparent',
+                                                color: isActive ? '#10b981' : '#475569',
+                                                fontWeight: isActive ? 700 : 600, textDecoration: 'none'
+                                            }}>
+                                                <item.icon size={18} /> {item.label}
+                                            </Link>
+                                        );
+                                    })}
+                                </nav>
+                            </div>
+                        </motion.aside>
+                    )}
+                </AnimatePresence>
 
                 {/* MAIN CONTENT NESTED */}
                 <main style={{ flex: 1, padding: '32px 32px 64px', overflowY: 'auto' }}>
