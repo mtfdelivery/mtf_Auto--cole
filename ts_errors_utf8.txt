@@ -1,0 +1,15 @@
+﻿src/components/layout/TopProgressBar.tsx(7,22): error TS2554: Expected 1 arguments, but got 0.
+src/components/PageTransition.tsx(26,13): error TS2322: Type '{ initial: { opacity: number; y: number; }; animate: { opacity: number; y: number; transition: { duration: number; ease: string[]; }; }; exit: { opacity: number; y: number; transition: { duration: number; }; }; }' is not assignable to type 'Variants'.
+  Property 'animate' is incompatible with index signature.
+    Type '{ opacity: number; y: number; transition: { duration: number; ease: string[]; }; }' is not assignable to type 'Variant'.
+      Type '{ opacity: number; y: number; transition: { duration: number; ease: string[]; }; }' is not assignable to type 'TargetAndTransition'.
+        Type '{ opacity: number; y: number; transition: { duration: number; ease: string[]; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
+          Types of property 'transition' are incompatible.
+            Type '{ duration: number; ease: string[]; }' is not assignable to type 'Transition<any> | undefined'.
+              Type '{ duration: number; ease: string[]; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
+                Type '{ duration: number; ease: string[]; }' is not assignable to type 'ValueAnimationTransition<any>'.
+                  Types of property 'ease' are incompatible.
+                    Type 'string[]' is not assignable to type 'Easing | Easing[] | undefined'.
+                      Type 'string[]' is not assignable to type 'EasingFunction | Easing[]'.
+                        Type 'string[]' is not assignable to type 'Easing[]'.
+                          Type 'string' is not assignable to type 'Easing'.

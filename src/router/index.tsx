@@ -1,0 +1,160 @@
+import { lazy, Suspense } from 'react';
+import { createBrowserRouter, RouterProvider, ScrollRestoration } from 'react-router-dom';
+import Layout from '@/components/layout/Layout';
+import HomeHeroSkeleton from '@/components/skeletons'; // Reuse the hero skeleton for full page loading
+
+// ── Lazy load all pages ──
+// These form the separate chunks that Vite will build
+const Home = lazy(() => import('@/pages/Home'));
+const Courses = lazy(() => import('@/pages/Courses'));
+const Instructors = lazy(() => import('@/pages/Instructors'));
+const Pricing = lazy(() => import('@/pages/Pricing'));
+const Contact = lazy(() => import('@/pages/Contact'));
+const Login = lazy(() => import('@/pages/Login'));
+const Signup = lazy(() => import('@/pages/Signup'));
+const StudentDashboard = lazy(() => import('@/pages/StudentDashboard'));
+const FindSchool = lazy(() => import('@/pages/FindSchool'));
+const ExamSimulator = lazy(() => import('@/pages/learner/ExamSimulator'));
+const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
+const TeacherDashboard = lazy(() => import('@/pages/TeacherDashboard'));
+
+// We create a map of import functions to feed to the NavBar for prefetching
+const prefetchRoutes = {
+    '/': () => import('@/pages/Home'),
+    '/courses': () => import('@/pages/Courses'),
+    '/instructors': () => import('@/pages/Instructors'),
+    '/pricing': () => import('@/pages/Pricing'),
+    '/contact': () => import('@/pages/Contact'),
+    '/login': () => import('@/pages/Login'),
+    '/signup': () => import('@/pages/Signup'),
+    '/dashboard': () => import('@/pages/StudentDashboard'),
+    '/ecoles': () => import('@/pages/FindSchool'),
+};
+
+const PageSkeleton = () => (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <HomeHeroSkeleton />
+    </div>
+);
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: (
+            <>
+                <ScrollRestoration />
+                <Layout routes={prefetchRoutes} />
+            </>
+        ),
+        children: [
+            {
+                index: true,
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <Home />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'courses',
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <Courses />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'instructors',
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <Instructors />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'pricing',
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <Pricing />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'dashboard',
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <StudentDashboard />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'ecoles',
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <FindSchool />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'learner/exam',
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <ExamSimulator />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'admin',
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <AdminDashboard />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'teacher',
+                element: (
+                    <Suspense fallback={<PageSkeleton />}>
+                        <TeacherDashboard />
+                    </Suspense>
+                ),
+            },
+        ],
+    },
+    // Auth routes typically don't share the main layout (or have a simplified one)
+    {
+        path: '/login',
+        element: (
+            <>
+                <ScrollRestoration />
+                <Suspense fallback={<PageSkeleton />}>
+                    <Login />
+                </Suspense>
+            </>
+        ),
+    },
+    {
+        path: '/signup',
+        element: (
+            <>
+                <ScrollRestoration />
+                <Suspense fallback={<PageSkeleton />}>
+                    <Signup />
+                </Suspense>
+            </>
+        ),
+    },
+    // Fallbacks for missing pages in this demo
+    {
+        path: 'contact',
+        element: <div style={{ padding: 'var(--space-12)', textAlign: 'center' }}><h2>Contact Page (To Do)</h2></div>
+    },
+    {
+        path: 'instructors',
+        element: <div style={{ padding: 'var(--space-12)', textAlign: 'center' }}><h2>Instructors Page (To Do)</h2></div>
+    }
+]);
+
+export function AppRouter() {
+    return <RouterProvider router={router} />;
+}
