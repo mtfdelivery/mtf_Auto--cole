@@ -12,7 +12,6 @@ const Pricing = lazy(() => import('@/pages/Pricing'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const Login = lazy(() => import('@/pages/Login'));
 const Signup = lazy(() => import('@/pages/Signup'));
-const StudentDashboard = lazy(() => import('@/pages/StudentDashboard'));
 const FindSchool = lazy(() => import('@/pages/FindSchool'));
 const ExamSimulator = lazy(() => import('@/pages/learner/ExamSimulator'));
 const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
@@ -35,7 +34,7 @@ const prefetchRoutes = {
     '/contact': () => import('@/pages/Contact'),
     '/login': () => import('@/pages/Login'),
     '/signup': () => import('@/pages/Signup'),
-    '/dashboard': () => import('@/pages/StudentDashboard'),
+    '/dashboard': () => import('@/pages/learner/LearnerLayout'),
     '/ecoles': () => import('@/pages/FindSchool'),
 };
 

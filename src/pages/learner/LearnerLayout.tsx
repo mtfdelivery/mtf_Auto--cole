@@ -18,7 +18,32 @@ export default function LearnerLayout() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const [aiMessages, setAiMessages] = useState<{ text: string; sender: 'ai' | 'user' }[]>([
+        { text: "Bonjour ! Je suis votre assistant IA 🤖 Posez-moi vos questions sur le code de la route.", sender: 'ai' }
+    ]);
+    const [aiInput, setAiInput] = useState('');
     const location = useLocation();
+
+    const AI_REPLIES: Record<string, string> = {
+        'priorité': "La priorité à droite s'applique à toute intersection sans signalisation. Si un véhicule arrive à votre droite, vous devez le laisser passer.",
+        'stop': "Le panneau STOP impose un arrêt complet. Vous devez marquer un temps d'arrêt à la ligne, même si la voie est libre.",
+        'rond-point': "Dans un rond-point, cédez le passage aux véhicules déjà engagés. Utilisez votre clignotant pour signaler votre sortie.",
+        'vitesse': "En agglomération : 50 km/h. Hors agglomération : 90 km/h. Autoroute : 130 km/h (110 km/h par temps de pluie).",
+        'ceinture': "Le port de la ceinture de sécurité est obligatoire pour tous les occupants du véhicule, avant et arrière.",
+    };
+
+    const handleAiSend = () => {
+        if (!aiInput.trim()) return;
+        const userMsg = aiInput.trim();
+        setAiMessages(prev => [...prev, { text: userMsg, sender: 'user' }]);
+        setAiInput('');
+
+        setTimeout(() => {
+            const key = Object.keys(AI_REPLIES).find(k => userMsg.toLowerCase().includes(k));
+            const reply = key ? (AI_REPLIES[key] ?? "Je vérifie...") : "Bonne question ! Je vais vérifier cela. En attendant, consultez vos cours vidéo pour plus de détails. 📚";
+            setAiMessages(prev => [...prev, { text: reply, sender: 'ai' }]);
+        }, 800);
+    };
 
     const navItems = [
         { path: '/dashboard', label: "Vue d'ensemble", icon: User },
@@ -171,37 +196,57 @@ export default function LearnerLayout() {
                     </div>
                 </main>
 
-                {/* FLOATING ACTION BUTTON CHAT WIDGET */}
-                <div style={{ position: 'fixed', bottom: 32, right: 32, zIndex: 100, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 16 }}>
+                {/* FLOATING AI ASSISTANT */}
+                <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 100, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 12 }}>
                     <AnimatePresence>
                         {isChatOpen && (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                                style={{ width: 340, height: 450, background: '#fff', borderRadius: 24, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+                                style={{ width: 320, height: 420, background: '#fff', borderRadius: 20, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
                             >
-                                <div style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#fff', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                        <div style={{ width: 36, height: 36, background: 'rgba(255,255,255,0.2)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <Sparkles size={20} fill="currentColor" />
-                                        </div>
+                                <div style={{ background: '#10b981', color: '#fff', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                        <Sparkles size={18} />
                                         <div>
-                                            <div style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: '-0.01em' }}>IA CodeDrive</div>
-                                            <div style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 500 }}>Assistant Virtuel</div>
+                                            <div style={{ fontWeight: 700, fontSize: '0.875rem' }}>IA CodeDrive</div>
+                                            <div style={{ fontSize: '0.6875rem', opacity: 0.85 }}>Assistant Virtuel</div>
                                         </div>
                                     </div>
-                                    <button onClick={() => setIsChatOpen(false)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.8, transition: 'opacity 0.2s' }}><X size={20} /></button>
+                                    <button onClick={() => setIsChatOpen(false)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex' }}><X size={18} /></button>
                                 </div>
-                                <div style={{ flex: 1, background: '#f8fafc', padding: 20, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-                                    <div style={{ alignSelf: 'flex-start', background: '#fff', padding: '14px 16px', borderRadius: 16, borderBottomLeftRadius: 4, fontSize: '0.875rem', color: '#334155', border: '1px solid #e2e8f0', lineHeight: 1.5, boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
-                                        Bonjour ! Je suis votre assistant virtuel IA. 🤖<br /><br />
-                                        Avez-vous une question concernant une leçon, une règle de priorité, ou un panneau spécifique ?
-                                    </div>
+                                <div style={{ flex: 1, background: '#f8fafc', padding: 16, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                    {aiMessages.map((msg, i) => (
+                                        <div key={i} style={{ alignSelf: msg.sender === 'ai' ? 'flex-start' : 'flex-end', maxWidth: '85%' }}>
+                                            <div style={{
+                                                padding: '10px 14px', borderRadius: 16, fontSize: '0.8125rem', lineHeight: 1.5,
+                                                background: msg.sender === 'ai' ? '#fff' : '#10b981',
+                                                color: msg.sender === 'ai' ? '#334155' : '#fff',
+                                                border: msg.sender === 'ai' ? '1px solid #e2e8f0' : 'none',
+                                                borderBottomLeftRadius: msg.sender === 'ai' ? 4 : 16,
+                                                borderBottomRightRadius: msg.sender === 'user' ? 4 : 16,
+                                            }}>{msg.text}</div>
+                                        </div>
+                                    ))}
                                 </div>
-                                <div style={{ padding: 16, background: '#fff', borderTop: '1px solid #e2e8f0' }}>
-                                    <div style={{ background: '#f1f5f9', borderRadius: 24, padding: '8px 16px', display: 'flex', alignItems: 'center' }}>
-                                        <input type="text" placeholder="Posez votre question à l'IA..." style={{ border: 'none', background: 'transparent', outline: 'none', flex: 1, fontSize: '0.875rem', color: '#0f172a' }} />
+                                <div style={{ padding: 12, background: '#fff', borderTop: '1px solid #e2e8f0' }}>
+                                    <div style={{ background: '#f1f5f9', borderRadius: 24, padding: '6px 6px 6px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <input
+                                            type="text"
+                                            value={aiInput}
+                                            onChange={(e) => setAiInput(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleAiSend()}
+                                            placeholder="Posez votre question..."
+                                            style={{ border: 'none', background: 'transparent', outline: 'none', flex: 1, fontSize: '0.8125rem', color: '#0f172a' }}
+                                        />
+                                        <button
+                                            onClick={handleAiSend}
+                                            disabled={!aiInput.trim()}
+                                            style={{ width: 32, height: 32, borderRadius: '50%', background: aiInput.trim() ? '#10b981' : '#e2e8f0', color: '#fff', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: aiInput.trim() ? 'pointer' : 'default', flexShrink: 0, transition: 'background 0.2s' }}
+                                        >
+                                            <ChevronDown size={16} style={{ transform: 'rotate(-90deg)' }} />
+                                        </button>
                                     </div>
                                 </div>
                             </motion.div>
@@ -211,12 +256,12 @@ export default function LearnerLayout() {
                     <button
                         onClick={() => setIsChatOpen(!isChatOpen)}
                         style={{
-                            width: 60, height: 60, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#fff',
-                            border: 'none', boxShadow: '0 10px 25px -5px rgba(99, 102, 241, 0.5)',
+                            width: 48, height: 48, borderRadius: '50%', background: '#10b981', color: '#fff',
+                            border: 'none', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s'
                         }}
                     >
-                        {isChatOpen ? <X size={24} /> : <Sparkles size={26} fill="currentColor" />}
+                        {isChatOpen ? <X size={20} /> : <Sparkles size={20} />}
                     </button>
                 </div>
             </div>
